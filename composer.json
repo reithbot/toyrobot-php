@@ -1,0 +1,39 @@
+{
+    "name": "reithbot/toyrobot",
+    "description": "Toy Robot",
+    "type": "project",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Douglas Reith",
+            "email": "douglas@reith.com.au"
+        }
+    ],
+    "require": {
+        "php": "^7.1",
+        "symfony/console": "^4.0.8",
+        "beberlei/assert": "^2.9.4",
+        "markrogoyski/math-php": "^0.40.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.1.3",
+        "friendsofphp/php-cs-fixer": "^2.11.1"
+    },
+    "suggest": {
+        "ext-apcu": "To store robots in memory"
+    },
+    "autoload": {
+        "psr-4": {
+            "Reith\\": "src/Reith/"
+        },
+        "exclude-from-classmap": [
+            "/tests/",
+            "**/tests/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Reith\\": "tests/src/Reith/"
+        }
+    }
+}
