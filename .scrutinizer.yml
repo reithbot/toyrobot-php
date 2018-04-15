@@ -1,5 +1,7 @@
 checks:
-    php: true
+    php:
+        excluded_dependencies:
+            - markrogoyski/math-php
 tools:
     external_code_coverage:
         timeout: 720
