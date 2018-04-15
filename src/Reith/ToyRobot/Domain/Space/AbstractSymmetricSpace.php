@@ -43,7 +43,7 @@ abstract class AbstractSymmetricSpace implements SpaceInterface
     }
 
     /**
-     * @param ?Place $place
+     * @param Place $place
      *
      * @return Robot
      */
