@@ -15,7 +15,7 @@ class Table extends AbstractSymmetricSpace
     /**
      * @param int $boundarySize
      */
-    public function create(int $boundarySize): Table
+    public static function create(int $boundarySize): Table
     {
         return new static(
             2, // 2 dimensions x,y

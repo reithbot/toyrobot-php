@@ -39,7 +39,7 @@ class Robot
      *
      * @throws Assert\AssertionFailedException
      */
-    public function create(SpaceInterface $space, Place $placement): Robot
+    public static function create(SpaceInterface $space, Place $placement): Robot
     {
         return new static($space, $placement);
     }
