@@ -62,7 +62,7 @@ class PlaceTest extends TestCase
         $busHelper = new BusHelper(new CommandBus([]), new CommandBus([]));
         $application->getHelperSet()->set($busHelper);
 
-        $result = $commandTester->execute([
+        $commandTester->execute([
             'command' => $command->getName(),
             'X,Y,F' => $invalidInstruction,
         ]);

@@ -40,7 +40,7 @@ class BusHelper implements HelperInterface
      */
     public function getHelperSet()
     {
-        return $this->getHelperSet;
+        return $this->helperSet;
     }
 
     /**
