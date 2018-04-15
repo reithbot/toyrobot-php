@@ -1,12 +1,12 @@
 <?php
 
 /**
- * (c) 2018 Douglas Reith
+ * (c) 2018 Douglas Reith.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Reith\ToyRobot\Domain\Robot;
 
@@ -17,7 +17,7 @@ use Reith\ToyRobot\Domain\Robot\Exception\NotPlacedInSpaceException;
 class Robot
 {
     /**
-     * Purchased by Rupert, then tanked :)
+     * Purchased by Rupert, then tanked :).
      *
      * @var SpaceInterface
      */
@@ -34,7 +34,9 @@ class Robot
     /**
      * @param SpaceInterface $space
      * @param Place          $placement
+     *
      * @return Robot
+     *
      * @throws Assert\AssertionFailedException
      */
     public function create(SpaceInterface $space, Place $placement): Robot
@@ -96,7 +98,7 @@ class Robot
     }
 
     /**
-     * validateCanMove
+     * validateCanMove.
      *
      * The robot requires a space during construction, however,
      * this is extra precautionary in case the space is removed

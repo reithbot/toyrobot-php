@@ -1,12 +1,12 @@
 <?php
 
 /**
- * (c) 2018 Douglas Reith
+ * (c) 2018 Douglas Reith.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Reith\ToyRobot\Domain\Space;
 
@@ -44,6 +44,7 @@ abstract class AbstractSymmetricSpace implements SpaceInterface
 
     /**
      * @param ?Place $place
+     *
      * @return Robot
      */
     public function placeRobot(?Place $place = null): Robot
@@ -58,7 +59,9 @@ abstract class AbstractSymmetricSpace implements SpaceInterface
 
     /**
      * @param Place $place
+     *
      * @return bool
+     *
      * @throws \Reith\ToyRobot\Domain\Space\Exception\BoundaryTestException
      */
     public function isAGoodPlace(Place $place): bool
@@ -75,6 +78,7 @@ abstract class AbstractSymmetricSpace implements SpaceInterface
     /**
      * @param Place      $from
      * @param Place|null $to   If not supplied, origin is $from
+     *
      * @throws PlaceDimensionsDoNotMatchSpaceException
      * @throws \Reith\ToyRobot\Domain\Space\Exception\BoundaryTestException
      */
@@ -103,6 +107,7 @@ abstract class AbstractSymmetricSpace implements SpaceInterface
      * dimensionality.
      *
      * @param Place $place ... Places to check
+     *
      * @throws PlaceDimensionsDoNotMatchSpaceException
      */
     private function validateDimensionality(Place ...$places): void

@@ -1,11 +1,11 @@
 <?php
 /**
- * (c) 2018 Douglas Reith
+ * (c) 2018 Douglas Reith.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Reith\ToyRobot\Domain\Space;
 
@@ -24,10 +24,10 @@ class TableTest extends TestCase
 
     /**
      * When moving in a space, the dimensions of the move must
-     * be the same dimensionality as the space (in this model)
+     * be the same dimensionality as the space (in this model).
      *
      * @dataProvider getPlacesNotFitForATable
-     * @expectedException Reith\ToyRobot\Domain\Space\Exception\PlaceDimensionsDoNotMatchSpaceException
+     * @expectedException \Reith\ToyRobot\Domain\Space\Exception\PlaceDimensionsDoNotMatchSpaceException
      */
     public static function testThatMovementsMustBeOfTheSameDimensionality(Place $badPlace)
     {
@@ -43,8 +43,8 @@ class TableTest extends TestCase
     {
         return [
             [Place::create([1])],
-            [Place::create([1,1,1])],
-            [Place::create([1,1,1,1])],
+            [Place::create([1, 1, 1])],
+            [Place::create([1, 1, 1, 1])],
         ];
     }
 }

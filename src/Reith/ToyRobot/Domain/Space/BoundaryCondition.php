@@ -1,12 +1,12 @@
 <?php
 
 /**
- * (c) 2018 Douglas Reith
+ * (c) 2018 Douglas Reith.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Reith\ToyRobot\Domain\Space;
 
@@ -27,6 +27,7 @@ class BoundaryCondition
 
     /**
      * @param int $bounds
+     *
      * @throws \Assert\AssertionFailedException
      */
     public static function create(int $bounds): BoundaryCondition
@@ -39,7 +40,9 @@ class BoundaryCondition
 
     /**
      * @param int $value
+     *
      * @return bool
+     *
      * @throws BoundaryTestException
      */
     public function test(int $value): bool
@@ -64,12 +67,13 @@ class BoundaryCondition
 
     /**
      * @param int $value
+     *
      * @throws BoundaryTestException
      */
     private function throwBoundaryTestException(int $value): void
     {
         $msg = sprintf('[%d] is outside the bounds of [0..%d]', $value, $this->bounds - 1);
 
-        throw new BoundaryTestException($msg); 
+        throw new BoundaryTestException($msg);
     }
 }
