@@ -13,17 +13,22 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Reith\ToyRobot\Infrastructure\Bus\CommandBus;
+use Reith\ToyRobot\Infrastructure\Bus\QueryBus;
 
 class PlaceTest extends TestCase
 {
-    public static function testValidInstructions()
+    public function testValidInstructions()
     {
         $application = new Application();
         $application->add(new Place());
         $command = $application->find('place');
         $commandTester = new CommandTester($command);
-        $busHelper = new BusHelper(new CommandBus([]), new CommandBus([]));
-        $application->getHelperSet()->set($busHelper);
+
+        $mockBusHelper = self::createMock(BusHelper::class);
+        $mockBusHelper->method('getName')
+            ->willReturn('bus');
+
+        $application->getHelperSet()->set($mockBusHelper);
 
         $result = $commandTester->execute([
             'command' => $command->getName(),

@@ -10,6 +10,6 @@ declare(strict_types=1);
 
 namespace Reith\ToyRobot\Infrastructure\Bus;
 
-class CommandBus extends AbstractBus
+class QueryBus extends AbstractBus
 {
 }

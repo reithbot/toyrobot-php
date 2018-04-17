@@ -22,15 +22,25 @@ class BusHelper implements HelperInterface
 
     private $queryBus;
 
-    public function __construct(BusInterface $commandBus, BusInterface $queryBus)
+    public function setCommandBus(BusInterface $commandBus): BusHelper
     {
         $this->commandBus = $commandBus;
+
+        return $this;
+    }
+
+    public function setQueryBus(BusInterface $queryBus): BusHelper
+    {
         $this->queryBus = $queryBus;
+
+        return $this;
     }
 
     public function setHelperSet(HelperSet $helperSet = null)
     {
         $this->helperSet = $helperSet;
+
+        return $this;
     }
 
     /**
@@ -55,11 +65,23 @@ class BusHelper implements HelperInterface
 
     public function postCommand($message)
     {
+        if (!$this->commandBus) {
+            throw new \RuntimeException(
+                'Command bus is not configured'
+            );
+        }
+
         $this->commandBus->post($message);
     }
 
     public function postQuery($message)
     {
+        if (!$this->commandBus) {
+            throw new \RuntimeException(
+                'Command bus is not configured'
+            );
+        }
+
         $this->queryBus->post($message);
     }
 }

@@ -8,12 +8,13 @@
  */
 declare(strict_types=1);
 
-namespace Reith\ToyRobot\Domain\Space;
+namespace Reith\ToyRobot\Infrastructure\Persistence;
 
-use Reith\ToyRobot\Domain\Robot\Place;
 use Reith\ToyRobot\Domain\Robot\Robot;
 
-interface SpaceInterface
+interface RobotStoreInterface
 {
-    public function placeRobot(?Place $place = null): Robot;
+    public function getRobot(): ?Robot;
+
+    public function saveRobot(Robot $robot): void;
 }

@@ -8,8 +8,12 @@
  */
 declare(strict_types=1);
 
-namespace Reith\ToyRobot\Infrastructure\Bus;
+namespace Reith\ToyRobot\Messaging\Annotation;
 
-class CommandBus extends AbstractBus
+/**
+ * @Annotation
+ * @Target("METHOD")
+ */
+final class Subscribe
 {
 }

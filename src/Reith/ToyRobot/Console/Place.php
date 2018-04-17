@@ -25,7 +25,7 @@ class Place extends Command
 
     protected function configure()
     {
-        $argMsg = 'The optional placement instructions. [X,Y] is the position. [F] is the direction, NESW';
+        $argMsg = 'The optional placement instructions. [X,Y] is the position. [F] is the direction: [N|E|S|W]';
 
         $this
             ->setName('PLACE')

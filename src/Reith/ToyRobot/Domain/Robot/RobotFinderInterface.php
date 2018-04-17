@@ -8,8 +8,12 @@
  */
 declare(strict_types=1);
 
-namespace Reith\ToyRobot\Infrastructure\Bus;
+namespace Reith\ToyRobot\Domain\Robot;
 
-class CommandBus extends AbstractBus
+interface RobotFinderInterface
 {
+    /**
+     * @return Robot[]
+     */
+    public function find(): array;
 }

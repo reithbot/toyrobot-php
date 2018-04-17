@@ -12,14 +12,68 @@ declare(strict_types=1);
 require __DIR__.'/vendor/autoload.php';
 
 use Symfony\Component\Console\Application;
+// For annotations
+use Doctrine\Common\Annotations\AnnotationRegistry;
+
+// Persistence
+use Reith\ToyRobot\Infrastructure\Persistence\FileRobotStore;
+use Reith\ToyRobot\Infrastructure\Persistence\RobotRepository;
+
+// Console tasks
 use Reith\ToyRobot\Console\Place;
 use Reith\ToyRobot\Console\BusHelper;
+
+// Buses
 use Reith\ToyRobot\Infrastructure\Bus\CommandBus;
+use Reith\ToyRobot\Infrastructure\Bus\QueryBus;
 
+// Command and query handlers
+use Reith\ToyRobot\CommandHandler\RobotPlacer;
+use Reith\ToyRobot\CommandHandler\RobotMover;
+use Reith\ToyRobot\QueryHandler\FindRobots;
+
+/**
+ * A lot of the following work would normally be delegated
+ * to a DI container. Doing it directly here because it is
+ * a small app
+ */
+
+// Set up the handler Subscribe annotation
+AnnotationRegistry::registerFile(__DIR__ . '/src/Reith/ToyRobot/Messaging/Annotation/Subscribe.php');
+
+// Set up the 5x5 Table
+$table = Table::create(5);
+
+// Get a File Robot store - use temp dir as a base path for storage
+$basePath = sys_get_temp_dir();
+$store = FileRobotStore::getStore($basePath);
+
+// Pass to the repository
+$repository = new RobotRepository($store);
+
+// Create the command and query handlers
+$robotPlacer = new RobotPlacer($table, $repository);
+//$robotMover = new RobotMover($table, $repository);
+//$findRobots = new FindRobots($repository);
+
+// Now the buses
+$commandBus = (new CommandBus())
+    ->registerHandler($robotPlacer)
+    //->registerHandler($robotMover)
+;
+
+//$queryBus = (new QueryBus())
+    //->registerHandler($findRobots);
+
+// Set up the console
 $application = new Application();
-
 $application->add(new Place());
-$busHelper = new BusHelper(new CommandBus([]), new CommandBus([]));
+
+$busHelper = (new BusHelper())
+    ->setCommandBus($commandBus)
+//    ->setQueryBus($queryBus)
+;
+
 $application->getHelperSet()->set($busHelper);
 
 $application->run();
