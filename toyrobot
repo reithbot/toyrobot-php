@@ -16,6 +16,7 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Logger\ConsoleLogger;
 use Reith\ToyRobot\Console\Place;
+use Reith\ToyRobot\Console\Report;
 use Reith\ToyRobot\Console\BusHelper;
 
 // For annotations
@@ -35,7 +36,7 @@ use Reith\ToyRobot\Infrastructure\Bus\QueryBus;
 // Command and query handlers
 use Reith\ToyRobot\CommandHandler\RobotPlacer;
 use Reith\ToyRobot\CommandHandler\RobotMover;
-use Reith\ToyRobot\QueryHandler\FindRobots;
+use Reith\ToyRobot\QueryHandler\RobotReporter;
 
 /**
  * A lot of the following work would normally be delegated
@@ -64,18 +65,24 @@ $repository = new RobotRepository($store);
 
 // Create the command and query handlers
 $robotPlacer = new RobotPlacer($table, $repository, $logger);
+$robotReporter = new RobotReporter($repository, $logger);
 
 // Now the buses
 $commandBus = (new CommandBus($logger))
     ->registerHandler($robotPlacer)
 ;
 
+$queryBus = (new QueryBus($logger))
+    ->registerHandler($robotReporter)
+;
+
 // Set up the console
 $application = new Application('Reith ToyRobot', '0.0.1');
-$application->add(new Place());
+$application->addCommands([new Place(), new Report()]);
 
 $busHelper = (new BusHelper())
     ->setCommandBus($commandBus)
+    ->setQueryBus($queryBus)
 ;
 
 $application->getHelperSet()->set($busHelper);

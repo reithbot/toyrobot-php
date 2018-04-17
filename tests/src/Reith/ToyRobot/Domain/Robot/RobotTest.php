@@ -61,6 +61,21 @@ class RobotTest extends TestCase
 
     /**
      * @test
+     * @expectedException \Assert\AssertionFailedException
+     */
+    public static function robotCannotStartWithABadDirection()
+    {
+        $table = Table::create(3);
+
+        Robot::create(
+            Table::create(4),
+            Place::create([0, 1]),
+            'U'
+        );
+    }
+
+    /**
+     * @test
      * @expectedException \Reith\ToyRobot\Domain\Space\Exception\BoundaryTestException
      */
     public static function robotCannotFallOffTheSouthSide()

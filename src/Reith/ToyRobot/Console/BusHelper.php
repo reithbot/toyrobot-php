@@ -63,7 +63,12 @@ class BusHelper implements HelperInterface
         return 'bus';
     }
 
-    public function postCommand($message)
+    /**
+     * @param mixed $message
+     *
+     * @throws \RuntimeException
+     */
+    public function postCommand($message): void
     {
         if (!$this->commandBus) {
             throw new \RuntimeException(
@@ -74,14 +79,20 @@ class BusHelper implements HelperInterface
         $this->commandBus->post($message);
     }
 
-    public function postQuery($message)
+    /**
+     * @param mixed     $message
+     * @param ?callable $callback To get response data
+     *
+     * @throws \RuntimeException
+     */
+    public function postQuery($message, ?callable $callback = null): void
     {
-        if (!$this->commandBus) {
+        if (!$this->queryBus) {
             throw new \RuntimeException(
-                'Command bus is not configured'
+                'Query bus is not configured'
             );
         }
 
-        $this->queryBus->post($message);
+        $this->queryBus->post($message, $callback);
     }
 }

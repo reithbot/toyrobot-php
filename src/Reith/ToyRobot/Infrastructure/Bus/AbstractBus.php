@@ -47,7 +47,7 @@ abstract class AbstractBus implements BusInterface
      *
      * @throws \Assert\AssertionFailedException
      */
-    public function post($message): void
+    public function post($message, ?callable $callback = null): void
     {
         // Expect the message to be an object to use reflection
         // and match the handler method
@@ -65,7 +65,11 @@ abstract class AbstractBus implements BusInterface
         );
 
         // Run the command
-        call_user_func($messageHandler, $message);
+        $result = call_user_func($messageHandler, $message);
+
+        if ($callback) {
+            call_user_func($callback, $result);
+        }
     }
 
     /**

@@ -76,8 +76,8 @@ class FileRobotStore implements RobotStoreInterface
             touch($fileName);
         }
 
-        // w+ - for reading and writing
-        return new static(new \SplFileObject($fileName, 'w+'), $logger);
+        // c+ - for reading and writing but do not truncate
+        return new static(new \SplFileObject($fileName, 'c+'), $logger);
     }
 
     /**

@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace Reith\ToyRobot\Domain\Robot;
 
 use Assert\Assert;
+use Assert\Assertion;
 use Reith\ToyRobot\Domain\Space\SpaceInterface;
 use Reith\ToyRobot\Domain\Robot\Exception\NotPlacedInSpaceException;
 
@@ -25,23 +26,63 @@ class Robot
 
     private $placement;
 
-    private function __construct(SpaceInterface $space, Place $placement)
-    {
+    private $facingDirection;
+
+    private function __construct(
+        SpaceInterface $space,
+        Place $placement,
+        Direction $facingDirection
+    ) {
         $this->mySpace = $space;
         $this->placement = $placement;
+        $this->facingDirection = $facingDirection;
     }
 
     /**
      * @param SpaceInterface $space
      * @param Place          $placement
+     * @param string|null    $facingDirection
      *
      * @return Robot
      *
      * @throws Assert\AssertionFailedException
      */
-    public static function create(SpaceInterface $space, Place $placement): Robot
+    public static function create(
+        SpaceInterface $space,
+        Place $placement,
+        ?string $facingDirection = 'E'
+    ): Robot {
+        return new static(
+            $space,
+            $placement,
+            new Direction($facingDirection)
+        );
+    }
+
+    public function move(): Robot
     {
-        return new static($space, $placement);
+        $this->validateCanMove();
+
+        $this->placement = $this->mySpace->move(
+            $this->placement,
+            $this->direction->getDirectionAsVector()
+        );
+
+        return $this;
+    }
+
+    public function left(): Robot
+    {
+        $this->direction->rotateLeft();
+
+        return $this;
+    }
+
+    public function right(): Robot
+    {
+        $this->direction->rotateRight();
+
+        return $this;
     }
 
     public function moveNorthward(): Robot
