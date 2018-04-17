@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Reith\ToyRobot\CommandHandler;
 
+use Psr\Log\LoggerInterface;
 use Reith\ToyRobot\Domain\Robot\RobotRepositoryInterface;
 use Reith\ToyRobot\Domain\Robot\Place;
 use Reith\ToyRobot\Domain\Space\SpaceInterface;
@@ -22,16 +23,21 @@ class RobotPlacer
 
     private $robotRepository;
 
+    private $logger;
+
     /**
      * @param SpaceInterface           $space
      * @param RobotRepositoryInterface $robotRepository
+     * @param LoggerInterface          $logger
      */
     public function __construct(
         SpaceInterface $space,
-        RobotRepositoryInterface $robotRepository
+        RobotRepositoryInterface $robotRepository,
+        LoggerInterface $logger
     ) {
         $this->space = $space;
         $this->robotRepository = $robotRepository;
+        $this->logger = $logger;
     }
 
     /**
@@ -46,5 +52,7 @@ class RobotPlacer
         );
 
         $this->robotRepository->save($robot);
+
+        $this->logger->info('Robot placed');
     }
 }

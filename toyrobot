@@ -11,17 +11,22 @@ declare(strict_types=1);
 
 require __DIR__.'/vendor/autoload.php';
 
+// Console classes
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Logger\ConsoleLogger;
+use Reith\ToyRobot\Console\Place;
+use Reith\ToyRobot\Console\BusHelper;
+
 // For annotations
 use Doctrine\Common\Annotations\AnnotationRegistry;
+
+// Table
+use Reith\ToyRobot\Domain\Space\Table;
 
 // Persistence
 use Reith\ToyRobot\Infrastructure\Persistence\FileRobotStore;
 use Reith\ToyRobot\Infrastructure\Persistence\RobotRepository;
-
-// Console tasks
-use Reith\ToyRobot\Console\Place;
-use Reith\ToyRobot\Console\BusHelper;
 
 // Buses
 use Reith\ToyRobot\Infrastructure\Bus\CommandBus;
@@ -39,41 +44,40 @@ use Reith\ToyRobot\QueryHandler\FindRobots;
  */
 
 // Set up the handler Subscribe annotation
-AnnotationRegistry::registerFile(__DIR__ . '/src/Reith/ToyRobot/Messaging/Annotation/Subscribe.php');
+AnnotationRegistry::registerFile(
+    __DIR__ . '/src/Reith/ToyRobot/Messaging/Annotation/Subscribe.php'
+);
+
+// App logging
+$output = new ConsoleOutput();
+$logger = new ConsoleLogger($output);
 
 // Set up the 5x5 Table
 $table = Table::create(5);
 
 // Get a File Robot store - use temp dir as a base path for storage
 $basePath = sys_get_temp_dir();
-$store = FileRobotStore::getStore($basePath);
+$store = FileRobotStore::getStore($basePath, $logger);
 
 // Pass to the repository
 $repository = new RobotRepository($store);
 
 // Create the command and query handlers
-$robotPlacer = new RobotPlacer($table, $repository);
-//$robotMover = new RobotMover($table, $repository);
-//$findRobots = new FindRobots($repository);
+$robotPlacer = new RobotPlacer($table, $repository, $logger);
 
 // Now the buses
-$commandBus = (new CommandBus())
+$commandBus = (new CommandBus($logger))
     ->registerHandler($robotPlacer)
-    //->registerHandler($robotMover)
 ;
 
-//$queryBus = (new QueryBus())
-    //->registerHandler($findRobots);
-
 // Set up the console
-$application = new Application();
+$application = new Application('Reith ToyRobot', '0.0.1');
 $application->add(new Place());
 
 $busHelper = (new BusHelper())
     ->setCommandBus($commandBus)
-//    ->setQueryBus($queryBus)
 ;
 
 $application->getHelperSet()->set($busHelper);
 
-$application->run();
+$application->run(null, $output);

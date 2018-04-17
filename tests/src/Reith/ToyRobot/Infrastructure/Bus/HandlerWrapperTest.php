@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Reith\ToyRobot\Infrastructure\Bus;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Reith\ToyRobot\Messaging\Command\PlaceRobot;
 use Reith\ToyRobot\Domain\Space\Table;
 use Reith\ToyRobot\Domain\Robot\RobotRepositoryInterface;
@@ -24,7 +25,8 @@ class HandlerWrapperTest extends TestCase
     {
         $table = Table::create(10);
         $mockRepo = self::createMock(RobotRepositoryInterface::class);
-        $robotPlacer = new RobotPlacer($table, $mockRepo);
+        $mockLogger = self::createMock(LoggerInterface::class);
+        $robotPlacer = new RobotPlacer($table, $mockRepo, $mockLogger);
 
         $wrapper = new HandlerWrapper($robotPlacer);
 

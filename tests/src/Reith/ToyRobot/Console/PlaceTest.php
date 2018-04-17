@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Reith\ToyRobot\Console;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Reith\ToyRobot\Infrastructure\Bus\CommandBus;
@@ -57,13 +58,14 @@ class PlaceTest extends TestCase
      * @dataProvider getInvalidInstructions
      * @expectedException \RuntimeException
      */
-    public static function testInvalidInstructions(string $invalidInstruction)
+    public function testInvalidInstructions(string $invalidInstruction)
     {
         $application = new Application();
         $application->add(new Place());
         $command = $application->find('place');
         $commandTester = new CommandTester($command);
-        $busHelper = new BusHelper(new CommandBus([]), new CommandBus([]));
+        $mockLogger = self::createMock(LoggerInterface::class);
+        $busHelper = new BusHelper(new CommandBus($mockLogger), new CommandBus($mockLogger));
         $application->getHelperSet()->set($busHelper);
 
         $commandTester->execute([

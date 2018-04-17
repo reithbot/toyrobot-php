@@ -10,15 +10,50 @@ declare(strict_types=1);
 
 namespace Reith\ToyRobot\Messaging\Command;
 
+use Assert\Assertion;
+
 class PlaceRobot
 {
     private $coordinates;
 
     private $direction;
 
+    /**
+     * @param array  $coordinates
+     * @param string $direction
+     */
     public function __construct(array $coordinates, string $direction)
     {
-        $this->coordinates = $coordinates;
+        $this->setCoordinates($coordinates);
+        $this->setDirection($direction);
+    }
+
+    /**
+     * @param array $coordinates
+     */
+    private function setCoordinates(array $coordinates): void
+    {
+        // Sanitize command input, ensure
+        // int[]
+        $this->coordinates = array_map(
+            function ($coord) {
+                Assertion::numeric($coord);
+
+                return (int) $coord;
+            },
+            $coordinates
+        );
+    }
+
+    /**
+     * @param string $direction
+     */
+    private function setDirection(string $direction): void
+    {
+        // Sanitize direction, 1 char capital
+        $direction = strtoupper(trim($direction));
+        Assertion::length($direction, 1);
+        Assertion::choice($direction, ['N', 'E', 'S', 'W']);
         $this->direction = $direction;
     }
 
@@ -27,7 +62,7 @@ class PlaceRobot
         return $this->coordinates;
     }
 
-    public function getDirection()
+    public function getDirection(): string
     {
         return $this->direction;
     }

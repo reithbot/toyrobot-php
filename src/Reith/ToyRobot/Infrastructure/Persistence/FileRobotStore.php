@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Reith\ToyRobot\Infrastructure\Persistence;
 
+use Psr\Log\LoggerInterface;
 use Reith\ToyRobot\Domain\Robot\Robot;
 
 class FileRobotStore implements RobotStoreInterface
@@ -20,14 +21,18 @@ class FileRobotStore implements RobotStoreInterface
 
     private $file;
 
+    private $logger;
+
     /**
      * __construct.
      *
      * @param \SplFileObject $file
+     * @param LoggerInterface|null $logger
      */
-    private function __construct(\SplFileObject $file)
+    private function __construct(\SplFileObject $file, ?LoggerInterface $logger = null)
     {
         $this->file = $file;
+        $this->logger = $logger;
     }
 
     public function __destruct()
@@ -36,30 +41,28 @@ class FileRobotStore implements RobotStoreInterface
     }
 
     /**
-     * getStore.
-     *
-     * @param string $basePath
+     * @param string               $basePath
+     * @param LoggerInterface|null $logger
      *
      * @return RobotStoreInterface
      */
-    public static function getStore(string $basePath): RobotStoreInterface
+    public static function getStore(string $basePath, ?LoggerInterface $logger = null): RobotStoreInterface
     {
         // Ensure the same store is used everywhere
         if (!self::$store) {
-            self::$store = self::createStore($basePath);
+            self::$store = self::createStore($basePath, $logger);
         }
 
         return self::$store;
     }
 
     /**
-     * createStore.
-     *
-     * @param string $basePath
+     * @param string               $basePath
+     * @param LoggerInterface|null $logger
      *
      * @return RobotStoreInterface
      */
-    private static function createStore(string $basePath): RobotStoreInterface
+    private static function createStore(string $basePath, ?LoggerInterface $logger): RobotStoreInterface
     {
         $baseDir = $basePath . DIRECTORY_SEPARATOR . 'robotstore';
 
@@ -74,7 +77,7 @@ class FileRobotStore implements RobotStoreInterface
         }
 
         // w+ - for reading and writing
-        return new static(new \SplFileObject($fileName), 'w+');
+        return new static(new \SplFileObject($fileName, 'w+'), $logger);
     }
 
     /**
@@ -101,7 +104,24 @@ class FileRobotStore implements RobotStoreInterface
         // Empty the file
         $this->file->ftruncate(0);
 
+        $this->file->rewind();
+
         // Save the robot
-        $this->file->fwrite(serialize($robot));
+        $bytes = $this->file->fwrite(serialize($robot));
+        $this->file->fflush();
+
+        $this->log(sprintf('Wrote [%d] robot bytes to [%s]', $bytes, $this->file->getRealPath()));
+    }
+
+    /**
+     * @param string $msg
+     */
+    private function log(string $msg): void
+    {
+        if (!$this->logger) {
+            return;
+        }
+
+        $this->logger->info($msg);
     }
 }

@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Reith\ToyRobot\Infrastructure\Bus;
 
+use Psr\Log\LoggerInterface;
 use Assert\Assertion;
 use Reith\ToyRobot\Messaging\BusInterface;
 
@@ -17,6 +18,16 @@ abstract class AbstractBus implements BusInterface
 {
     // Message handlers
     private $handlers;
+
+    private $logger;
+
+    /**
+     * @param LoggerInterface|null $logger
+     */
+    public function __construct(?LoggerInterface $logger = null)
+    {
+        $this->logger = $logger;
+    }
 
     /**
      * @param mixed $handler
@@ -44,8 +55,29 @@ abstract class AbstractBus implements BusInterface
 
         $messageHandler = $this->findHandler($message);
 
+        $this->log(
+            sprintf(
+                'Sending message [%s] to handler [%s::%s()]', 
+                get_class($message),
+                get_class($messageHandler[0]),
+                $messageHandler[1]
+            )
+        );
+
         // Run the command
         call_user_func($messageHandler, $message);
+    }
+
+    /**
+     * @param string $msg
+     */
+    private function log(string $msg): void
+    {
+        if (!$this->logger) {
+            return;
+        }
+
+        $this->logger->info($msg);
     }
 
     /**
