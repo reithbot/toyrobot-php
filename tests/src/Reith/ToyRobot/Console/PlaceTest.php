@@ -13,7 +13,6 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Reith\ToyRobot\Infrastructure\Bus\CommandBus;
-use Reith\ToyRobot\Infrastructure\Bus\QueryBus;
 
 class PlaceTest extends TestCase
 {

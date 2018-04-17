@@ -12,7 +12,6 @@ namespace Reith\ToyRobot\Infrastructure\Bus;
 
 use Assert\Assertion;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Reith\ToyRobot\Messaging\BusInterface;
 use Reith\ToyRobot\Messaging\Annotation\Subscribe;
 
 class HandlerWrapper
@@ -23,9 +22,10 @@ class HandlerWrapper
 
     /**
      * Part of this inspired by `AnnotatedMessageHandlerDescriptor`
-     * in https://github.com/szjani/predaddy
+     * in https://github.com/szjani/predaddy.
      *
      * @param mixed $handler
+     *
      * @throws \Assert\AssertionFailedException
      */
     public function __construct($handler)
@@ -79,6 +79,7 @@ class HandlerWrapper
 
     /**
      * @param mixed $message
+     *
      * @return callable
      */
     public function getCallable($message): ?callable

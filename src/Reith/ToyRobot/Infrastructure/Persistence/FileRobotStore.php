@@ -21,7 +21,7 @@ class FileRobotStore implements RobotStoreInterface
     private $file;
 
     /**
-     * __construct
+     * __construct.
      *
      * @param \SplFileObject $file
      */
@@ -36,9 +36,10 @@ class FileRobotStore implements RobotStoreInterface
     }
 
     /**
-     * getStore
+     * getStore.
      *
      * @param string $basePath
+     *
      * @return RobotStoreInterface
      */
     public static function getStore(string $basePath): RobotStoreInterface
@@ -52,9 +53,10 @@ class FileRobotStore implements RobotStoreInterface
     }
 
     /**
-     * createStore
+     * createStore.
      *
      * @param string $basePath
+     *
      * @return RobotStoreInterface
      */
     private static function createStore(string $basePath): RobotStoreInterface

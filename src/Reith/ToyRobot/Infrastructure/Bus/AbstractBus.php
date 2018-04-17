@@ -33,6 +33,7 @@ abstract class AbstractBus implements BusInterface
 
     /**
      * @param mixed $message
+     *
      * @throws \Assert\AssertionFailedException
      */
     public function post($message): void
@@ -49,6 +50,7 @@ abstract class AbstractBus implements BusInterface
 
     /**
      * @return callable
+     *
      * @throws \RuntimeException
      */
     private function findHandler($message): callable

@@ -11,7 +11,6 @@ namespace Reith\ToyRobot\Infrastructure\Persistence;
 
 use PHPUnit\Framework\TestCase;
 use org\bovigo\vfs\vfsStream;
-use org\bovigo\vfs\vfsStreamDirectory;
 use Reith\ToyRobot\Domain\Space\Table;
 use Reith\ToyRobot\Domain\Robot\Robot;
 

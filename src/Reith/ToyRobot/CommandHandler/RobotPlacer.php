@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace Reith\ToyRobot\CommandHandler;
 
 use Reith\ToyRobot\Domain\Robot\RobotRepositoryInterface;
-use Reith\ToyRobot\Domain\Robot\Robot;
 use Reith\ToyRobot\Domain\Robot\Place;
 use Reith\ToyRobot\Domain\Space\SpaceInterface;
 use Reith\ToyRobot\Messaging\Command\PlaceRobot;
@@ -37,6 +36,7 @@ class RobotPlacer
 
     /**
      * @Subscribe
+     *
      * @param PlaceRobot $command
      */
     public function handlePlaceRobot(PlaceRobot $command): void

@@ -43,7 +43,7 @@ class RobotRepository implements RobotRepositoryInterface, RobotFinderInterface
     }
 
     /**
-     * Implemented for the RobotFinderInterface
+     * Implemented for the RobotFinderInterface.
      *
      * @return Robot[]
      */
