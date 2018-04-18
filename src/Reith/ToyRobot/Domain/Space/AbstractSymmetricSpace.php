@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace Reith\ToyRobot\Domain\Space;
 
+use MathPHP\LinearAlgebra\Vector;
 use Reith\ToyRobot\Domain\Space\Exception\PlaceDimensionsDoNotMatchSpaceException;
 use Reith\ToyRobot\Domain\Robot\Robot;
-use Reith\ToyRobot\Domain\Robot\Place;
 
 abstract class AbstractSymmetricSpace implements SpaceInterface
 {
@@ -34,60 +34,66 @@ abstract class AbstractSymmetricSpace implements SpaceInterface
     }
 
     /**
-     * @return Place
+     * @return Vector
      */
-    protected function defaultPlacement(): Place
+    protected function defaultPosition(): Vector
     {
-        // Create a place with position [0,0,..n]
-        return Place::create(array_fill(0, $this->dimensions, 0));
+        // Create a default position [0,0,..n]
+        return new Vector(array_fill(0, $this->dimensions, 0));
     }
 
     /**
-     * @param Place $place
+     * @param Vector $position
      *
      * @return Robot
      */
-    public function placeRobot(?Place $place = null): Robot
+    public function placeRobot(?Vector $position = null): Robot
     {
-        $place = $place ?: $this->defaultPlacement();
+        $position = $position ?: $this->defaultPosition();
 
-        if ($this->isAGoodPlace($place)) {
+        if ($this->isAGoodPosition($position)) {
             // A robot is in a space with a place
-            return Robot::create($this, $place);
+            return Robot::create($this, $position);
         }
     }
 
     /**
-     * @param Place $place
+     * @param Vector $place
      *
      * @return bool
      *
      * @throws \Reith\ToyRobot\Domain\Space\Exception\BoundaryTestException
      */
-    public function isAGoodPlace(Place $place): bool
+    public function isAGoodPosition(Vector $position): bool
     {
         $condition = $this->boundaryCondition;
 
-        $place->map(function ($value) use ($condition) {
-            $condition->test($value);
-        });
+        // Get raw array
+        $coords = $position->getVector();
+
+        array_walk(
+            $coords,
+            function (int $value) use ($condition) {
+                $condition->test($value);
+            }
+        );
 
         return true;
     }
 
     /**
-     * @param Place      $from
-     * @param Place|null $to   If not supplied, origin is $from
+     * @param Vector      $from
+     * @param Vector|null $to   If not supplied, origin is $from
      *
      * @throws PlaceDimensionsDoNotMatchSpaceException
      * @throws \Reith\ToyRobot\Domain\Space\Exception\BoundaryTestException
      */
-    public function move(Place $from, ?Place $to = null): Place
+    public function move(Vector $from, ?Vector $to = null): Vector
     {
         if (!$to) {
             $to = $from;
             // Origin
-            $from = $this->defaultPlacement();
+            $from = $this->defaultPosition();
         }
 
         // Ensure the movement is of the same dimension as the
@@ -95,9 +101,9 @@ abstract class AbstractSymmetricSpace implements SpaceInterface
         $this->validateDimensionality($from, $to);
 
         // Add the vectors to get the new position
-        $final = Place::createFromVector($from->add($to));
+        $final = $from->add($to);
 
-        if ($this->isAGoodPlace($final)) {
+        if ($this->isAGoodPosition($final)) {
             return $final;
         }
     }
@@ -106,24 +112,25 @@ abstract class AbstractSymmetricSpace implements SpaceInterface
      * For all the places passed, ensure they are of the same
      * dimensionality.
      *
-     * @param Place $place ... Places to check
+     * @param Vector $vectors ... Vectors to check
      *
      * @throws PlaceDimensionsDoNotMatchSpaceException
      */
-    private function validateDimensionality(Place ...$places): void
+    private function validateDimensionality(Vector ...$vectors): void
     {
         $spaceDimensions = $this->dimensions;
 
         array_walk(
-            $places,
-            function (Place $place) use ($spaceDimensions) {
-                $errorMsg = sprintf(
-                    'Place has [%d] dimensions but space has [%d] dimensions',
-                    $place->getN(),
-                    $spaceDimensions
-                );
+            $vectors,
+            function (Vector $vector) use ($spaceDimensions) {
+                // Ensure the dimensions are the same
+                if ($vector->getN() !== $spaceDimensions) {
+                    $errorMsg = sprintf(
+                        'There is a position that has [%d] dimensions but space has [%d] dimensions',
+                        $vector->getN(),
+                        $spaceDimensions
+                    );
 
-                if ($place->getN() !== $spaceDimensions) {
                     throw new PlaceDimensionsDoNotMatchSpaceException(
                         $errorMsg
                     );

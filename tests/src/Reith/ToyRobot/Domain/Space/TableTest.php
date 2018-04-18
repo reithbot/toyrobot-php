@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace Reith\ToyRobot\Domain\Space;
 
+use MathPHP\LinearAlgebra\Vector;
 use PHPUnit\Framework\TestCase;
-use Reith\ToyRobot\Domain\Robot\Place;
 
 class TableTest extends TestCase
 {
@@ -26,25 +26,25 @@ class TableTest extends TestCase
      * When moving in a space, the dimensions of the move must
      * be the same dimensionality as the space (in this model).
      *
-     * @dataProvider getPlacesNotFitForATable
+     * @dataProvider getVectorsNotFitForATable
      * @expectedException \Reith\ToyRobot\Domain\Space\Exception\PlaceDimensionsDoNotMatchSpaceException
      */
-    public static function testThatMovementsMustBeOfTheSameDimensionality(Place $badPlace)
+    public static function testThatMovementsMustBeOfTheSameDimensionality(Vector $badPlace)
     {
         $table = Table::create(5);
         self::assertInstanceOf(Table::class, $table);
 
-        // If we just pass one Place to move() $from
+        // If we just pass one Vector to move() $from
         // is assumed to be origin
         $table->move($badPlace);
     }
 
-    public static function getPlacesNotFitForATable(): array
+    public static function getVectorsNotFitForATable(): array
     {
         return [
-            [Place::create([1])],
-            [Place::create([1, 1, 1])],
-            [Place::create([1, 1, 1, 1])],
+            [new Vector([1])],
+            [new Vector([1, 1, 1])],
+            [new Vector([1, 1, 1, 1])],
         ];
     }
 }

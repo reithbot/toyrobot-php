@@ -34,3 +34,5 @@ also add:
 2. Get the Robot to move from a flat two-dimensionsal space to a three or more (multi) dimensional space.
 
 
+So for example, our BoundaryCondition, that checks that we haven't fallen off
+the table, supports multi-dimensional spaces.

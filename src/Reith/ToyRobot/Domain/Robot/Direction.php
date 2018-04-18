@@ -72,6 +72,26 @@ class Direction
         );
     }
 
+    public function northward(): Vector
+    {
+        return new Vector(self::CHAR_VECTOR_MAPPING['N']);
+    }
+
+    public function eastward(): Vector
+    {
+        return new Vector(self::CHAR_VECTOR_MAPPING['E']);
+    }
+
+    public function westward(): Vector
+    {
+        return new Vector(self::CHAR_VECTOR_MAPPING['W']);
+    }
+
+    public function southward(): Vector
+    {
+        return new Vector(self::CHAR_VECTOR_MAPPING['S']);
+    }
+
     /**
      * @return Direction
      */

@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 namespace Reith\ToyRobot\Domain\Space;
 
-use Reith\ToyRobot\Domain\Robot\Place;
+use MathPHP\LinearAlgebra\Vector;
 use Reith\ToyRobot\Domain\Robot\Robot;
 
 interface SpaceInterface
 {
-    public function placeRobot(?Place $place = null): Robot;
+    public function placeRobot(?Vector $position = null): Robot;
 }

@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Reith\ToyRobot\Domain\Robot;
 
+use MathPHP\LinearAlgebra\Vector;
 use PHPUnit\Framework\TestCase;
 use Reith\ToyRobot\Domain\Space\Table;
 
@@ -20,7 +21,7 @@ class RobotTest extends TestCase
         $table = Table::create(5);
 
         // To create (or reset) a robot it must be placed in a space.
-        // Default placement is 0,0 (for 2 dimensions)
+        // Default position is 0,0 (for 2 dimensions)
         $robot = $table->placeRobot();
 
         self::assertInstanceOf(Robot::class, $robot);
@@ -35,28 +36,28 @@ class RobotTest extends TestCase
         $robot = $table->placeRobot();
 
         // From origin, 0,0, robot can move northward
-        $place = $robot->moveNorthward()->getPlacement();
+        $position = $robot->moveNorthward()->getPosition();
 
         // Now it should be at 0,1
-        self::assertEquals([0, 1], $place->getVector());
+        self::assertEquals([0, 1], $position->getVector());
 
-        $place = $robot->moveSouthward()->getPlacement();
+        $position = $robot->moveSouthward()->getPosition();
 
         // Now it should be back at origin
-        self::assertEquals([0, 0], $place->getVector());
+        self::assertEquals([0, 0], $position->getVector());
 
         // Let's get it dancing
-        $place = $robot
+        $position = $robot
             ->moveEastward()
             ->moveEastward()
             ->moveNorthward()
             ->moveNorthward()
             ->moveWestward()
             ->moveNorthward()
-            ->getPlacement()
+            ->getPosition()
         ;
 
-        self::assertEquals([1, 3], $place->getVector());
+        self::assertEquals([1, 3], $position->getVector());
     }
 
     /**
@@ -69,7 +70,7 @@ class RobotTest extends TestCase
 
         Robot::create(
             Table::create(4),
-            Place::create([0, 1]),
+            new Vector([0, 1]),
             'U'
         );
     }

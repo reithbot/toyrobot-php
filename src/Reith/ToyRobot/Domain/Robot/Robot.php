@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Reith\ToyRobot\Domain\Robot;
 
+use MathPHP\LinearAlgebra\Vector;
 use Assert\Assert;
 use Assert\Assertion;
 use Reith\ToyRobot\Domain\Space\SpaceInterface;
@@ -24,23 +25,23 @@ class Robot
      */
     private $mySpace;
 
-    private $placement;
+    private $position;
 
     private $facingDirection;
 
     private function __construct(
         SpaceInterface $space,
-        Place $placement,
+        Vector $position,
         Direction $facingDirection
     ) {
         $this->mySpace = $space;
-        $this->placement = $placement;
+        $this->position = $position;
         $this->facingDirection = $facingDirection;
     }
 
     /**
      * @param SpaceInterface $space
-     * @param Place          $placement
+     * @param Vector         $position
      * @param string|null    $facingDirection
      *
      * @return Robot
@@ -49,12 +50,12 @@ class Robot
      */
     public static function create(
         SpaceInterface $space,
-        Place $placement,
+        Vector $position,
         ?string $facingDirection = 'E'
     ): Robot {
         return new static(
             $space,
-            $placement,
+            $position,
             new Direction($facingDirection)
         );
     }
@@ -63,9 +64,9 @@ class Robot
     {
         $this->validateCanMove();
 
-        $this->placement = $this->mySpace->move(
-            $this->placement,
-            $this->direction->getDirectionAsVector()
+        $this->position = $this->mySpace->move(
+            $this->position,
+            $this->facingDirection->getDirectionAsVector()
         );
 
         return $this;
@@ -73,14 +74,14 @@ class Robot
 
     public function left(): Robot
     {
-        $this->direction->rotateLeft();
+        $this->facingDirection->rotateLeft();
 
         return $this;
     }
 
     public function right(): Robot
     {
-        $this->direction->rotateRight();
+        $this->facingDirection->rotateRight();
 
         return $this;
     }
@@ -89,9 +90,9 @@ class Robot
     {
         $this->validateCanMove();
 
-        $this->placement = $this->mySpace->move(
-            $this->placement,
-            CompassMove::northward()
+        $this->position = $this->mySpace->move(
+            $this->position,
+            $this->facingDirection->northward()
         );
 
         return $this;
@@ -101,9 +102,9 @@ class Robot
     {
         $this->validateCanMove();
 
-        $this->placement = $this->mySpace->move(
-            $this->placement,
-            CompassMove::eastward()
+        $this->position = $this->mySpace->move(
+            $this->position,
+            $this->facingDirection->eastward()
         );
 
         return $this;
@@ -113,9 +114,9 @@ class Robot
     {
         $this->validateCanMove();
 
-        $this->placement = $this->mySpace->move(
-            $this->placement,
-            CompassMove::southward()
+        $this->position = $this->mySpace->move(
+            $this->position,
+            $this->facingDirection->southward()
         );
 
         return $this;
@@ -125,17 +126,17 @@ class Robot
     {
         $this->validateCanMove();
 
-        $this->placement = $this->mySpace->move(
-            $this->placement,
-            CompassMove::westward()
+        $this->position = $this->mySpace->move(
+            $this->position,
+            $this->facingDirection->westward()
         );
 
         return $this;
     }
 
-    public function getPlacement(): Place
+    public function getPosition(): Vector
     {
-        return $this->placement;
+        return $this->position;
     }
 
     /**

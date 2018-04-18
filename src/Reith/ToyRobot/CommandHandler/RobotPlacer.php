@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Reith\ToyRobot\CommandHandler;
 
+use MathPHP\LinearAlgebra\Vector;
 use Psr\Log\LoggerInterface;
 use Reith\ToyRobot\Domain\Robot\RobotRepositoryInterface;
 use Reith\ToyRobot\Domain\Robot\Place;
@@ -48,7 +49,7 @@ class RobotPlacer
     public function handlePlaceRobot(PlaceRobot $command): void
     {
         $robot = $this->space->placeRobot(
-            Place::create($command->getCoordinates())
+            new Vector($command->getCoordinates())
         );
 
         $this->robotRepository->save($robot);
