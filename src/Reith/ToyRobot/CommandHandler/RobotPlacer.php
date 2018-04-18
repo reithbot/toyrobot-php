@@ -18,26 +18,26 @@ use Reith\ToyRobot\Domain\Space\SpaceInterface;
 use Reith\ToyRobot\Messaging\Command\PlaceRobot;
 use Reith\ToyRobot\Messaging\Annotation\Subscribe;
 
-class RobotPlacer
+final class RobotPlacer
 {
     private $spaceInterface;
 
-    private $robotRepository;
+    private $repository;
 
     private $logger;
 
     /**
      * @param SpaceInterface           $space
-     * @param RobotRepositoryInterface $robotRepository
+     * @param RobotRepositoryInterface $repository
      * @param LoggerInterface          $logger
      */
     public function __construct(
         SpaceInterface $space,
-        RobotRepositoryInterface $robotRepository,
+        RobotRepositoryInterface $repository,
         LoggerInterface $logger
     ) {
         $this->space = $space;
-        $this->robotRepository = $robotRepository;
+        $this->repository = $repository;
         $this->logger = $logger;
     }
 
@@ -53,7 +53,7 @@ class RobotPlacer
             $command->getDirection()
         );
 
-        $this->robotRepository->save($robot);
+        $this->repository->save($robot);
 
         $this->logger->info('Robot placed');
     }

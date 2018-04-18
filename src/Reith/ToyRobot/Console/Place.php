@@ -31,7 +31,7 @@ class Place extends Command
             ->setDescription('Place the robot on the table')
             ->addArgument(self::ARG, InputArgument::OPTIONAL, $argMsg)
             ->setHelp(<<<EOT
-The <info>robot:place</info> will set a robot on the table.
+The <info>PLACE</info> instruction will set a robot on the table.
 
 <info>./toyrobot</info> <comment>PLACE X,Y,F</comment>
 

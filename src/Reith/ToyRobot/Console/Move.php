@@ -14,19 +14,19 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
-use Reith\ToyRobot\Messaging\Query\RobotReport;
+use Reith\ToyRobot\Messaging\Command\MoveForward;
 
-class Report extends Command
+class Move extends Command
 {
     protected function configure()
     {
         $this
-            ->setName('REPORT')
-            ->setDescription('Get a report from the robot')
+            ->setName('MOVE')
+            ->setDescription('Move the robot forward')
             ->setHelp(<<<EOT
-The <info>REPORT</info> instruction will get a report from the robot;
+The <info>MOVE</info> instruction will tell the robot to move forward.
 
-<info>./toyrobot</info> <comment>REPORT</comment>
+<info>./toyrobot</info> <comment>MOVE</comment>
 
 EOT
         );
@@ -38,12 +38,12 @@ EOT
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $message = new RobotReport();
+        $message = new MoveForward();
 
-        $onSuccess = function (string $result) use ($output) {
-            $output->writeln($result);
-        };
+        $this->getHelper('bus')->postCommand($message);
 
-        $this->getHelper('bus')->postQuery($message, $onSuccess);
+        $this->getApplication()
+            ->find('REPORT')
+            ->run($input, $output);
     }
 }

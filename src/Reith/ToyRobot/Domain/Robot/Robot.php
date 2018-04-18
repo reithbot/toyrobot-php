@@ -16,7 +16,7 @@ use Assert\Assertion;
 use Reith\ToyRobot\Domain\Space\SpaceInterface;
 use Reith\ToyRobot\Domain\Robot\Exception\NotPlacedInSpaceException;
 
-class Robot
+class Robot implements \Serializable
 {
     /**
      * Purchased by Rupert, then tanked :).
@@ -174,6 +174,34 @@ class Robot
         $positionAsString = implode(',', $this->position->getVector());
 
         return $positionAsString . ',' . $this->getFacingDirectionAsString();
+    }
+
+    /**
+     * Simplify the serialization of the Robot to
+     * scalars
+     *
+     * @return string
+     */
+    public function serialize(): string
+    {
+        return serialize([
+            $this->mySpace,
+            $this->position->getVector(),
+            $this->getFacingDirectionAsString()
+        ]);
+    }
+
+    /**
+     * Re-hydrate the Robot
+     *
+     * @param string $data
+     */
+    public function unserialize($data)
+    {
+        [$this->mySpace, $positionArr, $facingString] = unserialize($data);
+
+        $this->position = new Vector($positionArr);
+        $this->facingDirection = new Direction($facingString);
     }
 
     /**

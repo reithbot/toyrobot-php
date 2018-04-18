@@ -16,21 +16,21 @@ use Reith\ToyRobot\Domain\Robot\RobotRepositoryInterface;
 use Reith\ToyRobot\Messaging\Query\RobotReport;
 use Reith\ToyRobot\Messaging\Annotation\Subscribe;
 
-class RobotReporter
+final class RobotReporter
 {
-    private $robotRepository;
+    private $repository;
 
     private $logger;
 
     /**
-     * @param RobotRepositoryInterface $robotRepository
+     * @param RobotRepositoryInterface $repository
      * @param LoggerInterface          $logger
      */
     public function __construct(
-        RobotRepositoryInterface $robotRepository,
+        RobotRepositoryInterface $repository,
         LoggerInterface $logger
     ) {
-        $this->robotRepository = $robotRepository;
+        $this->repository = $repository;
         $this->logger = $logger;
     }
 
@@ -42,11 +42,11 @@ class RobotReporter
      */
     public function handleReport(RobotReport $query): string
     {
-        $robot = $this->robotRepository->load();
+        $robot = $this->repository->load();
 
         if (!($robot instanceof Robot)) {
             throw new \RuntimeException(
-                'Robot cannot be found'
+                'Robot cannot be found. Please PLACE the robot first.'
             );
         }
 

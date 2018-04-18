@@ -5,6 +5,22 @@
 
 ## Running the console
 
+Use:
+
+```
+./toyrobot
+```
+to see the list of commands you can operate.
+
+With any command you can prefix it with help to get more info, e.g.:
+
+```
+./toyrobot help PLACE
+```
+
+The commands are listed in UPPERCASE in accordance with the specs but lowercase
+will work just as well.
+
 You can use `-vv` to see logging messages provided by the `LoggerInterface`;
 
 
@@ -20,6 +36,13 @@ You can see the test coverage here (and there is a badge at the top of this
 README):
 
 * https://scrutinizer-ci.com/g/reithbot/toyrobot-php/
+
+Note the whole app is tested via `tests/toyrobotTest.php` but additionally all
+(or almost all!) of the components are individually tested as well.
+
+Writing tests before, or as you build the SUT, help clarify the API and responsibility.
+Also the unit tests provide a very quick feedback loop so you can get started on
+the next job.
 
 ## Architecture
 ### Linear Algebra

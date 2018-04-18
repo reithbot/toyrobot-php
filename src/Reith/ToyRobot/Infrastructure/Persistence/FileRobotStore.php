@@ -93,7 +93,22 @@ class FileRobotStore implements RobotStoreInterface
 
         $contents = $this->file->fread($this->file->getSize());
 
-        return unserialize($contents);
+        $robot = $this->decode($contents);
+
+        if (false === $robot) {
+            $this->log(
+                'There was an error getting the robot from disk. Please PLACE the robot again',
+                'error'
+            );
+
+            // Empty the file
+            $this->file->ftruncate(0);
+            $this->file = null;
+
+            return null;
+        }
+
+        return $robot;
     }
 
     /**
@@ -107,7 +122,10 @@ class FileRobotStore implements RobotStoreInterface
         $this->file->rewind();
 
         // Save the robot
-        $bytes = $this->file->fwrite(serialize($robot));
+        $bytes = $this->file->fwrite(
+            $this->encode($robot)
+        );
+
         $this->file->fflush();
 
         $this->log(sprintf('Wrote [%d] robot bytes to [%s]', $bytes, $this->file->getRealPath()));
@@ -115,13 +133,32 @@ class FileRobotStore implements RobotStoreInterface
 
     /**
      * @param string $msg
+     * @param string $level
      */
-    private function log(string $msg): void
+    private function log(string $msg, ?string $level = 'info'): void
     {
         if (!$this->logger) {
             return;
         }
 
-        $this->logger->info($msg);
+        $this->logger->log($level, $msg);
+    }
+
+    /**
+     * @param string $contents
+     * @return mixed
+     */
+    private function decode(string $contents)
+    {
+        return unserialize($contents);
+    }
+
+    /**
+     * @param Robot $robot
+     * @return string
+     */
+    private function encode(Robot $robot): string
+    {
+        return serialize($robot);
     }
 }
