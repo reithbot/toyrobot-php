@@ -57,7 +57,7 @@ will work just as well.
 You can use `-vv` to see logging messages provided by the `LoggerInterface`, e.g
 
 ```
-./toyrobot place 4,2,S
+./toyrobot -vv place 4,2,S
 ```
 
 
@@ -128,3 +128,16 @@ contains the responsibility for working out whether a move is valid (by proxying
 ### Infrastructure
 Infrastructure contains the concrete persistence classes. The robot is simply stored on disk between runs. We simplify
 the data to serialize through sleep (serialize) and wakeup methods (unserialize) on the `Robot`.
+
+
+## Builds
+This repo is build by [Travis](https://travis-ci.org/reithbot/toyrobot-php) in three ways:
+
+1. Against php7.1
+2. Against php7.2
+3. Against php7.2 but with the minimum versions of libraries
+
+Travis produces the code coverage report which is then sent over to [Scrutinizer
+CI](https://scrutinizer-ci.com/g/reithbot/toyrobot-php/). The Scrutinizer job will have
+already started but it will wait to receive the code coverage report. Scrutinizer then conducts the analysis and
+produces the reports and suggested fixes.
