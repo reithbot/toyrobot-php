@@ -53,6 +53,9 @@ class Robot
         Vector $position,
         ?string $facingDirection = 'E'
     ): Robot {
+
+        $facingDirection = $facingDirection ?: 'E';
+
         return new static(
             $space,
             $position,
@@ -60,6 +63,9 @@ class Robot
         );
     }
 
+    /**
+     * @return Robot
+     */
     public function move(): Robot
     {
         $this->validateCanMove();
@@ -72,6 +78,9 @@ class Robot
         return $this;
     }
 
+    /**
+     * @return Robot
+     */
     public function left(): Robot
     {
         $this->facingDirection->rotateLeft();
@@ -79,6 +88,9 @@ class Robot
         return $this;
     }
 
+    /**
+     * @return Robot
+     */
     public function right(): Robot
     {
         $this->facingDirection->rotateRight();
@@ -86,6 +98,9 @@ class Robot
         return $this;
     }
 
+    /**
+     * @return Robot
+     */
     public function moveNorthward(): Robot
     {
         $this->validateCanMove();
@@ -98,6 +113,9 @@ class Robot
         return $this;
     }
 
+    /**
+     * @return Robot
+     */
     public function moveEastward(): Robot
     {
         $this->validateCanMove();
@@ -110,6 +128,9 @@ class Robot
         return $this;
     }
 
+    /**
+     * @return Robot
+     */
     public function moveSouthward(): Robot
     {
         $this->validateCanMove();
@@ -122,6 +143,9 @@ class Robot
         return $this;
     }
 
+    /**
+     * @return Robot
+     */
     public function moveWestward(): Robot
     {
         $this->validateCanMove();
@@ -134,9 +158,30 @@ class Robot
         return $this;
     }
 
+    /**
+     * @return Vector
+     */
     public function getPosition(): Vector
     {
         return $this->position;
+    }
+
+    /**
+     * @return string In the form 'X,Y,F'
+     */
+    public function getReportAsString(): string
+    {
+        $positionAsString = implode(',', $this->position->getVector());
+
+        return $positionAsString . ',' . $this->getFacingDirectionAsString();
+    }
+
+    /**
+     * @return string
+     */
+    private function getFacingDirectionAsString(): string
+    {
+        return $this->facingDirection->getDirectionAsString();
     }
 
     /**

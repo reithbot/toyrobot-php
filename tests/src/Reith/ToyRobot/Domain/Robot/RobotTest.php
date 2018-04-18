@@ -58,6 +58,8 @@ class RobotTest extends TestCase
         ;
 
         self::assertEquals([1, 3], $position->getVector());
+
+        self::assertSame('1,3,N', $robot->getReportAsString());
     }
 
     /**

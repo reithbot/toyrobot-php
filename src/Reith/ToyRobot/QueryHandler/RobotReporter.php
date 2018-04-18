@@ -50,6 +50,6 @@ class RobotReporter
             );
         }
 
-        return 'reporting';
+        return $robot->getReportAsString();
     }
 }

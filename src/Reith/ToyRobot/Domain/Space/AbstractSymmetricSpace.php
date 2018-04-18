@@ -43,17 +43,18 @@ abstract class AbstractSymmetricSpace implements SpaceInterface
     }
 
     /**
-     * @param Vector $position
+     * @param Vector|null $position
+     * @param string|null $startingDirection
      *
      * @return Robot
      */
-    public function placeRobot(?Vector $position = null): Robot
+    public function placeRobot(?Vector $position = null, ?string $startingDirection = null): Robot
     {
         $position = $position ?: $this->defaultPosition();
 
         if ($this->isAGoodPosition($position)) {
             // A robot is in a space with a place
-            return Robot::create($this, $position);
+            return Robot::create($this, $position, $startingDirection);
         }
     }
 

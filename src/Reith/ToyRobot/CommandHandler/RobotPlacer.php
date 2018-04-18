@@ -49,7 +49,8 @@ class RobotPlacer
     public function handlePlaceRobot(PlaceRobot $command): void
     {
         $robot = $this->space->placeRobot(
-            new Vector($command->getCoordinates())
+            new Vector($command->getCoordinates()),
+            $command->getDirection()
         );
 
         $this->robotRepository->save($robot);

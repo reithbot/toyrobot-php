@@ -14,6 +14,7 @@ use Psr\Log\LoggerInterface;
 use Reith\ToyRobot\Messaging\Command\PlaceRobot;
 use Reith\ToyRobot\Domain\Space\Table;
 use Reith\ToyRobot\Domain\Robot\RobotRepositoryInterface;
+use Reith\ToyRobot\Domain\Robot\Robot;
 
 class RobotPlacerTest extends TestCase
 {
@@ -29,10 +30,24 @@ class RobotPlacerTest extends TestCase
 
         self::assertInstanceOf(RobotPlacer::class, $robotPlacer);
 
-        $command = new PlaceRobot([0, 1], 'N');
+        $command = new PlaceRobot([1, 4], 'W');
 
-        $mockRepo->expects($this->once())->method('save');
+        $localRobot = null;
+
+        $mockRepo->expects($this->once())
+            ->method('save')
+            ->with(
+                $this->callback(function (Robot $robot) use (&$localRobot) {
+                    $localRobot = $robot;
+
+                    return true;
+                })
+            );
 
         $robotPlacer->handlePlaceRobot($command);
+
+        self::assertInstanceOf(Robot::class, $localRobot);
+
+        self::assertSame('1,4,W', $localRobot->getReportAsString());
     }
 }

@@ -64,32 +64,35 @@ class Direction
 
     /**
      * @param string $direction
+     * @return Direction
      */
-    private function setDirectionFromString(string $direction): void
+    private function setDirectionFromString(string $direction): Direction
     {
         $this->direction = new Vector(
             self::CHAR_VECTOR_MAPPING[$direction]
         );
+
+        return $this;
     }
 
     public function northward(): Vector
     {
-        return new Vector(self::CHAR_VECTOR_MAPPING['N']);
+        return $this->setDirectionFromString('N')->getDirectionAsVector();
     }
 
     public function eastward(): Vector
     {
-        return new Vector(self::CHAR_VECTOR_MAPPING['E']);
+        return $this->setDirectionFromString('E')->getDirectionAsVector();
     }
 
     public function westward(): Vector
     {
-        return new Vector(self::CHAR_VECTOR_MAPPING['W']);
+        return $this->setDirectionFromString('W')->getDirectionAsVector();
     }
 
     public function southward(): Vector
     {
-        return new Vector(self::CHAR_VECTOR_MAPPING['S']);
+        return $this->setDirectionFromString('S')->getDirectionAsVector();
     }
 
     /**
