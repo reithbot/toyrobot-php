@@ -141,3 +141,10 @@ Travis produces the code coverage report which is then sent over to [Scrutinizer
 CI](https://scrutinizer-ci.com/g/reithbot/toyrobot-php/). The Scrutinizer job will have
 already started but it will wait to receive the code coverage report. Scrutinizer then conducts the analysis and
 produces the reports and suggested fixes.
+
+## TODO
+
+* Move to using an event loop and the in-memory repository to avoid persisting state to disk;
+* Create an application launcher to be re-used with tests;
+* Investigate a light DI container;
+* Increase QueryHandler and Infrastructure code coverage;
